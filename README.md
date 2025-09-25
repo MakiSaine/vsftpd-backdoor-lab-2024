@@ -1,7 +1,20 @@
 # VSFTPD Backdoor Lab 2024
 
 This project documents my independent lab work where I explored and exploited the VSFTPD 2.3.4 backdoor vulnerability on Metasploitable 2.  
-The goal was to simulate a real-world attack chain, practice ethical exploitation techniques, and strengthen my understanding of penetration testing workflows.
+The goal was to simulate a realistic attack chain, practice ethical exploitation techniques, and strengthen my understanding of a structured penetration testing workflow.
+
+---
+
+## Table of Contents
+
+- [Objectives](#objectives)
+- [Step 1 Finding the Target IP](#step-1-finding-the-target-ip)
+- [Step 2 Scanning with Nmap](#step-2-scanning-with-nmap)
+- [Step 3 Starting Metasploit](#step-3-starting-metasploit)
+- [Step 4 Searching and Configuring the Exploit](#step-4-searching-and-configuring-the-exploit)
+- [Step 5 Restarting and Logging In](#step-5-restarting-and-logging-in)
+- [Step 6 Verifying Access](#step-6-verifying-access)
+- [Lessons Learned](#lessons-learned)
 
 ---
 
@@ -43,7 +56,7 @@ I launched Metasploit using `msfconsole` to prepare for exploitation.
 
 ## Step 4: Searching and Configuring the Exploit
 
-I searched for `vsftpd` in Metasploit, selected the `vsftpd_234_backdoor` exploit, set the `RHOSTS` to the target IP and `RPORT` to 21, then executed the exploit.  
+I searched for `vsftpd` in Metasploit, selected the `vsftpd_234_backdoor` exploit, set `RHOSTS` to the target IP and `RPORT` to 21, then executed the exploit.  
 Once the session opened, I created a new user with `useradd` and set a password.
 
 ![VSFTPD Exploit Execution](screenshots/exploit_vsftpd_backdoor.png)
@@ -67,7 +80,8 @@ Finally, I used the `whoami` command to confirm that I was successfully logged i
 ## Lessons Learned
 
 This lab gave me hands-on experience with a real vulnerability in a safe environment.  
-I learned the importance of proper network segmentation, service hardening, and keeping software patched to prevent attackers from exploiting known backdoors.
+I reinforced the value of network segmentation, service hardening, and keeping software patched to prevent attackers from exploiting known backdoors.  
+The step by step process also improved my documentation habits and evidence collection.
 
 ---
 
