@@ -1,116 +1,75 @@
-# VSFTPD Backdoor Exploitation Lab 2024
+# VSFTPD Backdoor Lab 2024
 
-This repository documents my self-initiated security lab where I wanted to challenge myself to see if I could perform a complete attack chain against a deliberately vulnerable target.  
-I set up Metasploitable 2 and Kali Linux to simulate a real penetration testing scenario.  
-The goal was to identify vulnerabilities, exploit them step by step, create a new user on the system, and document every action.  
-This project allowed me to practice professional penetration testing methodology while building a structured, evidence-based report.
-
----
-
-## Table of Contents
-- [Objectives](#objectives)
-- [Tools Used](#tools-used)
-- [Lab Setup](#lab-setup)
-- [Attack Walkthrough](#attack-walkthrough)
-- [Key Findings](#key-findings)
-- [Lessons Learned](#lessons-learned)
-- [References](#references)
+This project documents my independent lab work where I explored and exploited the VSFTPD 2.3.4 backdoor vulnerability on Metasploitable 2.  
+The goal was to simulate a real-world attack chain, practice ethical exploitation techniques, and strengthen my understanding of penetration testing workflows.
 
 ---
 
 ## Objectives
-- Practice reconnaissance, scanning, exploitation, and post-exploitation in a safe lab environment  
-- Gain hands-on experience with Metasploit and vulnerability exploitation  
-- Document every step with screenshots and explanations  
-- Simulate a realistic attacker workflow  
-- Reflect on mitigations and hardening techniques
+
+- Identify the IP address of the target machine  
+- Perform a full Nmap scan and enumerate open ports  
+- Launch Metasploit and search for the VSFTPD backdoor exploit  
+- Configure and execute the exploit to gain a remote shell  
+- Create a new user on the target machine  
+- Verify persistence by logging in as the new user  
 
 ---
 
-## Tools Used
-- **Metasploitable 2** (vulnerable target machine)
-- **Kali Linux** (attacker machine)
-- **Metasploit Framework**
-- **Nmap** (port scanning and service enumeration)
+## Step 1: Finding the Target IP
 
----
-
-## Lab Setup
-The lab was created using two virtual machines on a local network:
-- **Metasploitable 2** (target) running on VirtualBox  
-- **Kali Linux** (attacker) running on VirtualBox  
-
-The target was configured to obtain a local IP address that could be scanned from Kali Linux.
-
----
-
-## Attack Walkthrough
-
-### Step 1: Finding the Target IP
-The first step was to identify the IP address of the Metasploitable 2 machine using `ifconfig`.
+I started by logging into Metasploitable 2 as **msfadmin** and running `ifconfig` to get the IP address.
 
 ![Metasploitable IP](screenshots/ifconfig_metasploitable_ip.png)
 
 ---
 
-### Step 2: Scanning with Nmap
-I ran a full port and service version scan to discover open services and detect potential vulnerabilities.
+## Step 2: Scanning with Nmap
 
-![Nmap Scan](screenshots/nmap_scan_results.png)
+Using Kali Linux, I ran a full port scan with service detection to identify running services.  
+The scan revealed that the FTP service was running **vsftpd 2.3.4**, which is a known vulnerable version.
 
-Key discovery: **vsftpd 2.3.4** was running on port 21, a version known to have a backdoor vulnerability.
-
----
-
-### Step 3: Starting Metasploit
-I launched Metasploit using `msfconsole` to search for exploits.
-
-![Metasploit Console](screenshots/msfconsole_start.png)
+![Nmap Scan Results](screenshots/nmap_scan_results.png)
 
 ---
 
-### Step 4: Finding and Running the Exploit
-I searched for "vsftpd" inside Metasploit, found the backdoor exploit, set the target IP (RHOST) and port (RPORT), and executed the exploit.
+## Step 3: Starting Metasploit
 
-![Exploit VSFTPD](screenshots/exploit_vsftpd_backdoor.png)
+I launched Metasploit using `msfconsole` to prepare for exploitation.
 
-The exploit succeeded and gave me a remote shell on the target machine.
-
----
-
-### Step 5: Creating a New User
-Inside the shell, I created a new user account and set a password, proving that I had full control of the system.
+![Metasploit Console](screenshots/start_msfconsole.png)
 
 ---
 
-### Step 6: Verifying Access
-Finally, I logged in as the newly created user and verified access using the `whoami` command.
+## Step 4: Searching and Configuring the Exploit
 
-![Whoami Result](screenshots/whoami_new_user.png)
+I searched for `vsftpd` in Metasploit, selected the `vsftpd_234_backdoor` exploit, set the `RHOSTS` to the target IP and `RPORT` to 21, then executed the exploit.  
+Once the session opened, I created a new user with `useradd` and set a password.
 
-This confirmed successful exploitation and persistence.
+![VSFTPD Exploit Execution](screenshots/exploit_vsftpd_backdoor.png)
 
 ---
 
-## Key Findings
-- **FTP Service Vulnerability:** vsftpd 2.3.4 contains a backdoor that allows remote shell access.  
-- **Weak Network Segmentation:** The machine was fully reachable and unprotected.  
-- **Privilege Escalation Risk:** Creation of new users shows how attackers could maintain access.
+## Step 5: Restarting and Logging In
+
+After exploitation, I restarted Metasploitable 2 and logged in as the new user to confirm access.
+
+---
+
+## Step 6: Verifying Access
+
+Finally, I used the `whoami` command to confirm that I was successfully logged in as the new user.
+
+![Whoami Result](screenshots/whoami_verification.png)
 
 ---
 
 ## Lessons Learned
-- Proper patch management and service hardening are critical to prevent such attacks.  
-- Unnecessary services should be disabled, especially those with known vulnerabilities.  
-- Network segmentation and access controls can limit attacker movement inside networks.
 
----
-
-## References
-- Offensive Security. (n.d.). *Metasploitable 2 Exploitability Guide*.  
-- Rapid7. (n.d.). *Metasploit Framework Documentation*.  
-- Nmap.org. (2024). *Nmap Reference Guide*.  
+This lab gave me hands-on experience with a real vulnerability in a safe environment.  
+I learned the importance of proper network segmentation, service hardening, and keeping software patched to prevent attackers from exploiting known backdoors.
 
 ---
 
 *Created by **Mahamed Maki Saine** – Cybersecurity Enthusiast | Ethical Hacker | AI Learner*
+
